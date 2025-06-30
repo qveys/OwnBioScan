@@ -1,0 +1,240 @@
+For all designs I ask you to make, have them be beautiful, not cookie cutter. Make webpages that are fully featured and worthy for production.
+
+By default, this template supports JSX syntax with Tailwind CSS classes, React hooks, and Lucide React for icons. Do not install other packages for UI themes, icons, etc unless absolutely necessary or I request them.
+
+Use icons from lucide-react for logos.
+
+# Prompt de Refactoring Complet - Own BioScan
+
+## Objectif
+Refactorise le code existant d'Own BioScan pour réduire significativement le nombre de lignes de code tout en améliorant la maintenabilité, les performances et en suivant les meilleures pratiques React/TypeScript.
+
+## Instructions de Refactoring
+
+### 1. Optimisation des Composants React
+
+**Simplification des composants :**
+- Extrait la logique métier complexe dans des hooks personnalisés
+- Convertis les gros composants en composants plus petits et réutilisables
+- Utilise la composition plutôt que l'héritage
+- Élimine la duplication de code entre composants similaires
+- Remplace les classes CSS répétitives par des composants wrapper réutilisables
+
+**Hooks personnalisés à créer :**
+- `useScrollEffect()` pour les effets de scroll répétés
+- `useResponsive()` pour la gestion responsive
+- `useLocalStorage()` pour la persistance de données
+- `useAnimation()` pour les animations communes
+
+### 2. Consolidation des Styles
+
+**Création de composants de style réutilisables :**
+```typescript
+// Crée des composants wrapper pour réduire la duplication
+const Card = ({ children, variant = 'default' }) => (
+  <div className={`card ${variant === 'highlight' ? 'card-highlight' : ''}`}>
+    {children}
+  </div>
+);
+
+const Button = ({ children, variant = 'primary', size = 'md', ...props }) => (
+  <button className={`btn btn-${variant} btn-${size}`} {...props}>
+    {children}
+  </button>
+);
+
+const Section = ({ children, id, title }) => (
+  <section id={id} className="section">
+    {title && <h2 className="section-title">{title}</h2>}
+    {children}
+  </section>
+);
+```
+
+**Optimisation CSS/Tailwind :**
+- Définis des classes de composants personnalisées dans `index.css` pour les patterns répétitifs
+- Utilise les @apply directives pour regrouper les utilitaires Tailwind fréquents
+- Crée des variantes de composants au lieu de répéter les mêmes classes
+
+### 3. Refactoring des Données et Configuration
+
+**Externalisation des données statiques :**
+- Extrait tous les textes, témoignages, avantages dans des fichiers de configuration
+- Crée un fichier `src/data/content.ts` pour centraliser le contenu
+- Utilise des constantes pour les URLs, couleurs, et valeurs de configuration
+- Groupe les données similaires en objets structurés
+
+**Exemple de structure de données :**
+```typescript
+// src/data/content.ts
+export const HERO_CONTENT = {
+  title: "...",
+  subtitle: "...",
+  cta: { primary: "...", secondary: "..." }
+};
+
+export const BENEFITS = [
+  { icon: Clock, title: "...", description: "..." },
+  // ...
+];
+
+export const TESTIMONIALS = [
+  { name: "...", role: "...", content: "...", rating: 5 },
+  // ...
+];
+```
+
+### 4. Optimisation des Imports et Exports
+
+**Centralisation des exports :**
+- Crée un fichier `src/components/index.ts` pour exporter tous les composants
+- Utilise des barrel exports pour simplifier les imports
+- Groupe les imports par catégorie (React, libraries, local)
+- Élimine les imports inutilisés
+
+**Structure d'import optimisée :**
+```typescript
+// src/components/index.ts
+export { default as Header } from './Header';
+export { default as Hero } from './Hero';
+export { default as Benefits } from './Benefits';
+// ...
+
+// Dans les fichiers utilisant ces composants
+import { Header, Hero, Benefits } from '@/components';
+```
+
+### 5. Simplification de la Logique
+
+**Refactoring des fonctions complexes :**
+- Divise les fonctions longues en fonctions plus petites et spécialisées
+- Utilise des fonctions pures quand possible
+- Implémente la composition de fonctions pour les transformations de données
+- Remplace les conditions complexes par des lookup tables ou des maps
+
+**Optimisation des re-renders :**
+- Utilise React.memo pour les composants qui ne changent pas souvent
+- Implémente useMemo et useCallback pour les calculs coûteux
+- Évite la création d'objets/fonctions dans les render functions
+
+### 6. Amélioration de la Structure des Fichiers
+
+**Réorganisation des dossiers :**
+```
+src/
+├── components/
+│   ├── common/          # Composants réutilisables (Button, Card, etc.)
+│   ├── sections/        # Sections de la landing page
+│   └── index.ts         # Barrel exports
+├── hooks/               # Hooks personnalisés
+├── data/                # Données statiques et configuration
+├── utils/               # Fonctions utilitaires
+├── types/               # Types TypeScript
+└── styles/
+    ├── tokens.ts        # Design tokens
+    └── components.css   # Styles de composants
+```
+
+### 7. TypeScript et Performance
+
+**Optimisation TypeScript :**
+- Définis des interfaces communes pour réduire la duplication de types
+- Utilise des types union et des discriminated unions
+- Crée des types utilitaires pour les props de composants
+- Utilise des génériques pour les composants réutilisables
+
+**Exemple de types optimisés :**
+```typescript
+// src/types/common.ts
+export interface BaseProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export type ButtonVariant = 'primary' | 'secondary' | 'accent';
+export type Size = 'sm' | 'md' | 'lg';
+
+export interface ButtonProps extends BaseProps {
+  variant?: ButtonVariant;
+  size?: Size;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+```
+
+### 8. Consolidation des Animations et Effets
+
+**Centralisation des animations :**
+- Crée un fichier `src/styles/animations.css` pour toutes les animations
+- Utilise des variables CSS pour les durées et easings
+- Remplace les animations inline par des classes réutilisables
+- Groupe les animations similaires
+
+### 9. Instructions Spécifiques d'Exécution
+
+**Processus de refactoring à suivre :**
+
+1. **Phase 1 - Structure :**
+   - Crée la nouvelle structure de dossiers
+   - Déplace les fichiers dans leurs nouveaux emplacements
+   - Configure les barrel exports
+
+2. **Phase 2 - Composants communs :**
+   - Identifie tous les patterns de code répétitifs
+   - Crée les composants wrapper (Button, Card, Section, etc.)
+   - Remplace toutes les utilisations par les nouveaux composants
+
+3. **Phase 3 - Données et contenu :**
+   - Extrait tout le contenu statique dans `src/data/content.ts`
+   - Remplace les textes hardcodés par des références aux données
+   - Configure les types TypeScript pour le contenu
+
+4. **Phase 4 - Hooks et logique :**
+   - Identifie la logique répétitive entre composants
+   - Crée des hooks personnalisés pour cette logique
+   - Refactorise les composants pour utiliser ces hooks
+
+5. **Phase 5 - Styles et optimisation :**
+   - Consolide les styles répétitifs en classes CSS
+   - Optimise les imports et exports
+   - Ajoute React.memo, useMemo, useCallback où nécessaire
+
+### 10. Métriques de Succès
+
+**Objectifs quantifiables :**
+- Réduction d'au moins 30% du nombre total de lignes de code
+- Élimination de 90% de la duplication de code
+- Réduction du bundle size de 15-20%
+- Amélioration des Core Web Vitals (LCP, FID, CLS)
+- Réduction du nombre de re-renders inutiles
+
+**Vérifications qualité :**
+- Aucune régression fonctionnelle
+- Temps de build inchangé ou amélioré
+- Maintenabilité du code améliorée
+- Lisibilité et structure du code améliorées
+- Performance runtime maintenue ou améliorée
+
+### 11. Contrôles de Qualité Post-Refactoring
+
+**Tests à effectuer :**
+- Vérifier que tous les composants s'affichent correctement
+- Tester la responsivité sur mobile/desktop
+- Valider toutes les interactions (scroll, hover, click)
+- Contrôler les animations et transitions
+- Vérifier l'accessibilité (navigation clavier, contrastes)
+- Tester les performances (lighthouse, bundle analyzer)
+
+## Instructions d'Exécution pour Bolt.new
+
+Exécute ce refactoring en suivant l'ordre des phases définies ci-dessus. Pour chaque modification :
+
+1. **Conserve la fonctionnalité existante** - aucune régression autorisée
+2. **Maintiens le design actuel** - l'apparence visuelle doit rester identique
+3. **Documente les changements majeurs** via des commentaires
+4. **Teste chaque phase** avant de passer à la suivante
+5. **Optimise graduellement** - ne change pas tout d'un coup
+
+**Priorité :** Commence par la Phase 1 (structure) puis progresse séquentiellement. Si une optimisation risque de casser quelque chose, priorise la stabilité.
+
+**Résultat attendu :** Un code plus propre, plus maintenable, avec significativement moins de lignes, tout en conservant exactement les mêmes fonctionnalités et apparence visuelle.

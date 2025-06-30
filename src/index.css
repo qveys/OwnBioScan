@@ -1,0 +1,547 @@
+@import '@fontsource/montserrat/700.css';
+@import '@fontsource/open-sans/400.css';
+@import '@fontsource/open-sans/600.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Improve readability on mobile */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  body {
+    @apply font-open-sans text-text-primary antialiased text-base;
+    /* Support for touch gestures */
+    touch-action: manipulation;
+    /* Improve scroll performance */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-montserrat font-bold uppercase;
+    /* Improve readability */
+    line-height: 1.2;
+  }
+
+  /* Focus indicators for accessibility */
+  *:focus {
+    outline: 2px solid #000080;
+    outline-offset: 2px;
+  }
+
+  /* Improve contrast for links */
+  a {
+    color: #000080;
+    text-decoration-skip-ink: auto;
+  }
+
+  /* Support for reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Improve readability on high-density screens */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-5 py-3 rounded-md font-medium transition-all duration-classic ease-smooth;
+    /* Touch targets minimum 44px */
+    min-height: 44px;
+    min-width: 44px;
+    /* Improve touch accessibility */
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-opacity-90;
+    /* Improved contrast */
+    color: white;
+    background-color: #000080;
+  }
+  
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-opacity-90;
+    color: white;
+    background-color: #660000;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-white;
+    /* Minimum 3:1 contrast */
+    border-color: #000080;
+    color: #000080;
+  }
+
+  /* Enhanced focus states */
+  .btn:focus {
+    outline: 2px solid #000080;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0, 0, 128, 0.1);
+  }
+
+  /* Accessible disabled states */
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-4 uppercase;
+    /* Improve visual hierarchy */
+    line-height: 1.1;
+  }
+  
+  .section-description {
+    @apply text-xl text-text-secondary max-w-2xl mx-auto;
+    /* Improve readability */
+    line-height: 1.5;
+  }
+  
+  .icon-container {
+    @apply w-24 h-24 rounded-full flex items-center justify-center transition-transform duration-classic;
+    /* Appropriate touch targets */
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .card {
+    @apply bg-white rounded-md shadow-subtle p-6 transition-all duration-classic hover:shadow-medium;
+    /* Improve accessibility */
+    border: 1px solid transparent;
+  }
+
+  .card:focus-within {
+    border-color: #000080;
+    box-shadow: 0 0 0 2px rgba(0, 0, 128, 0.1);
+  }
+
+  .card-highlight {
+    @apply shadow-medium border-2 border-primary/20;
+  }
+
+  .card-shadow {
+    @apply shadow-lg hover:shadow-xl;
+  }
+
+  /* Accessibility components */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #000080;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 1000;
+    border-radius: 4px;
+  }
+
+  .skip-link:focus {
+    top: 6px;
+  }
+
+  /* Mobile optimizations */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* GPU-optimized animations */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  .animate-bounce-subtle {
+    animation: bounceSubtle 2s ease-in-out infinite;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1.2s ease-out;
+    transform: translateZ(0);
+    will-change: opacity;
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlowly 3s ease-in-out infinite;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  /* Responsive typography */
+  .responsive-text {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+  }
+
+  .responsive-title {
+    font-size: clamp(1.5rem, 5vw, 3rem);
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      border: 2px solid white;
+    }
+    
+    .btn-outline {
+      border-width: 3px;
+    }
+    
+    .card {
+      border: 2px solid #000;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .card {
+      background-color: #1f2937;
+      color: #f9fafb;
+    }
+  }
+}
+
+/* High-performance animations */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.9, 0.9, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes bounceSubtle {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -5px, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulseSlowly {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes wiggle {
+  0%, 7%, 14%, 21%, 28%, 35%, 42%, 49%, 56%, 63%, 70%, 77%, 84%, 91%, 98%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  3.5%, 10.5%, 17.5%, 24.5%, 31.5%, 38.5%, 45.5%, 52.5%, 59.5%, 66.5%, 73.5%, 80.5%, 87.5%, 94.5% {
+    transform: translate3d(-1px, 0, 0);
+  }
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.1);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Support for reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-scale-in,
+  .animate-bounce-subtle,
+  .animate-float,
+  .animate-fade-in,
+  .animate-pulse-slow,
+  .animate-wiggle,
+  .animate-heartbeat {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hover effects for devices with hover */
+@media (hover: hover) {
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+  
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 128, 0.3);
+  }
+}
+
+/* Optimizations for touch screens */
+@media (pointer: coarse) {
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px 16px;
+  }
+  
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Increased spacing for interactive elements */
+  .interactive-element {
+    margin: 8px;
+  }
+}
+
+/* Support for high-density screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .icon-crisp {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Optimized responsive breakpoints */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.875rem;
+    line-height: 1.2;
+  }
+  
+  .section-description {
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Support for landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-landscape-adjust {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Improve readability */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  /* Improved spacing for form elements */
+  input, button, select, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Support for high contrast modes */
+@media (prefers-contrast: high) {
+  .btn {
+    border-width: 2px;
+  }
+  
+  .card {
+    border: 2px solid #000;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break {
+    page-break-before: always;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+}
